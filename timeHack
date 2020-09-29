@@ -1,5 +1,0 @@
-#!/bin/bash
-
-CURRDB=$(du -sh /db)
-
-echo $(date +%D) $(date +%T) $CURRDB  $(du -s /db)>> /home/db2inst1/logs/db.log  
