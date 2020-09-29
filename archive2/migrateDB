@@ -3,7 +3,7 @@
 
 echo Clearing and Re nstalling Database 
 
-~/sbin/mkDB
+./mkDB
 
 echo Setting Admin authorities on
 
@@ -13,7 +13,7 @@ db2set DB2_RESTORE_GRANT_ADMIN_AUTHORITIES=ON
 
 echo Staging data separating Foreign Keys and Triggers 
 
-~/sbin/stageDATA
+./stageDATA
 
 
 
