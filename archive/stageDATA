@@ -1,0 +1,35 @@
+#!/bin/bash
+
+DATAMOUNT=/filetransfer/db_exp/datatransfer
+
+
+# Move target data to  a local Partitio
+
+		
+dbs=('icmnlsdb' 'rmdb' 'odsutils')
+		
+		
+
+for d in "${dbs[@]}"
+do
+	sed -n '/-- DDL Statements for Triggers/,/^-- /p' $DATAMOUNT/$d/look/$d.Look.sql  > $DATAMOUNT/$d/look/$d.Triggers.sql
+	sed -in '/-- DDL Statements for Triggers/,/^-- /d' $DATAMOUNT/$d/look/$d.Look.sql  
+
+	echo Extracting $d Foreign Keys
+	sed -n '/-- DDL Statements for Foreign Keys/,/^---\+$/p' $DATAMOUNT/$d/look/$d.Look.sql  > $DATAMOUNT/$d/look/$d.Foreign.sql
+	sed -in '/-- DDL Statements for Foreign Keys/,/^---\+$/d' $DATAMOUNT/$d/look/$d.Look.sql
+
+done
+
+
+
+
+echo ================================= 
+echo Transfer Complete
+echo =================================
+
+
+
+
+# grep -v '^-' icmnlsdb.Look.sql | tr '\n' ' ' | awk 'BEGIN { RS = ";" } { print  $0 ";" }' > 2file
+

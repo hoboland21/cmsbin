@@ -1,0 +1,92 @@
+#!/bin/bash
+
+db2stop force
+ipclean
+db2start 
+
+
+db2 drop database ICMNLSDB
+db2 drop database RMDB
+db2 drop database ODSUTILS
+#db2 drop database ECMDB
+
+rm -fr /db/*
+
+
+db2 create db ICMNLSDB AUTOMATIC STORAGE NO ON '/db'
+db2 create db RMDB AUTOMATIC STORAGE NO ON '/db'
+db2 create db ODSUTILS AUTOMATIC STORAGE NO ON '/db'  
+
+
+#db2 create db ECMDB on /db
+
+#db2 connect to icmnlsdb
+#db2 update db cfg using LOGARCHMETH1 DISK:/db/
+#db2 connect to rmdb
+#db2 update db cfg using LOGARCHMETH1 DISK:/db/
+#db2 connect to odsutils
+#db2 update db cfg using LOGARCHMETH1 DISK:/db/
+
+
+db2 connect to icmnlsdb
+db2 update db cfg using LOGFILSIZ 5000
+db2 update db cfg using LOGPRIMARY 50
+db2 update db cfg using LOGSECOND 206
+
+db2 connect to rmdb
+db2 update db cfg using LOGFILSIZ 5000
+db2 update db cfg using LOGPRIMARY 50
+db2 update db cfg using LOGSECOND 206
+
+db2 connect to odsutils
+db2 update db cfg using LOGFILSIZ 5000
+db2 update db cfg using LOGPRIMARY 50
+db2 update db cfg using LOGSECOND 206
+
+#db2 connect to ecmdb
+#db2 update db cfg using LOGFILSIZ 5000
+#db2 update db cfg using LOGPRIMARY 50
+#db2 update db cfg using LOGSECOND 206
+
+db2stop force
+ipclean
+db2start 
+
+db2 connect to icmnlsdb
+db2 'GRANT CREATETAB, BINDADD, CONNECT, CREATE_NOT_FENCED_ROUTINE, IMPLICIT_SCHEMA, LOAD, DBADM, CREATE_EXTERNAL_ROUTINE, QUIESCE_CONNECT, ACCESSCTRL, DATAACCESS ON DATABASE TO USER "ICMADMIN"'
+db2 'GRANT CREATETAB, BINDADD, CONNECT, CREATE_NOT_FENCED_ROUTINE, IMPLICIT_SCHEMA, LOAD, DBADM, CREATE_EXTERNAL_ROUTINE, QUIESCE_CONNECT, ACCESSCTRL, DATAACCESS ON DATABASE TO USER "ICMCONCT"'
+
+db2 connect to rmdb
+db2 'GRANT CREATETAB, BINDADD, CONNECT, CREATE_NOT_FENCED_ROUTINE, IMPLICIT_SCHEMA, LOAD, DBADM, CREATE_EXTERNAL_ROUTINE, QUIESCE_CONNECT, ACCESSCTRL, DATAACCESS ON DATABASE TO USER "ICMADMIN"'
+db2 'GRANT CREATETAB, BINDADD, CONNECT, CREATE_NOT_FENCED_ROUTINE, IMPLICIT_SCHEMA, LOAD, DBADM, CREATE_EXTERNAL_ROUTINE, QUIESCE_CONNECT, ACCESSCTRL, DATAACCESS, SECADM ON DATABASE TO USER "RMADMIN"'
+
+db2 connect to odsutils
+db2 'GRANT CREATETAB, BINDADD, CONNECT, CREATE_NOT_FENCED_ROUTINE, IMPLICIT_SCHEMA, LOAD, DBADM, CREATE_EXTERNAL_ROUTINE, QUIESCE_CONNECT, ACCESSCTRL, DATAACCESS ON DATABASE TO USER "ICMADMIN"'
+db2 'GRANT CREATETAB, BINDADD, CONNECT, CREATE_NOT_FENCED_ROUTINE, IMPLICIT_SCHEMA, LOAD, DBADM, CREATE_EXTERNAL_ROUTINE, QUIESCE_CONNECT, ACCESSCTRL, DATAACCESS ON DATABASE TO USER "ICMCONCT"'
+
+
+#db2 connect to ecmdb
+#db2 'GRANT CREATETAB, BINDADD, CONNECT, CREATE_NOT_FENCED_ROUTINE, IMPLICIT_SCHEMA, LOAD, DBADM, CREATE_EXTERNAL_ROUTINE, QUIESCE_CONNECT, ACCESSCTRL, DATAACCESS ON DATABASE TO USER "ICMADMIN"'
+#db2 'GRANT CREATETAB, BINDADD, CONNECT, CREATE_NOT_FENCED_ROUTINE, IMPLICIT_SCHEMA, LOAD, DBADM, CREATE_EXTERNAL_ROUTINE, QUIESCE_CONNECT, ACCESSCTRL, DATAACCESS ON DATABASE TO USER "ICMCONCT"'
+
+
+echo ==============================================================
+echo DB2 Database setup complete 
+echo ==============================================================
+
+#mkdir /db/bkp_emptydb
+		
+#dbs=('ICMNLSDB' 'RMDB' 'ODSUTILS')
+		
+		
+
+#for d in "${dbs[@]}"
+#do
+#	db2 connect to $d
+#	db2 quiesce database immediate force connections
+#	db2 connect reset
+#	db2 backup database $d to /db/bkp_emptydb compress without prompting
+#echo $d
+#done
+
+

@@ -1,0 +1,82 @@
+#!/bin/bash
+
+
+echo Clearing and Re nstalling Database 
+
+~/sbin/mkDB
+
+echo Setting Admin authorities on
+
+export DB2CODEPAGE=1208
+
+db2set DB2_RESTORE_GRANT_ADMIN_AUTHORITIES=ON
+
+echo Staging data separating Foreign Keys and Triggers 
+
+~/sbin/stageDATA
+
+
+
+DATAMOUNT=/filetransfer/db_exp/datatransfer
+
+find $DATAMOUNT -name '*.txt' -exec rm {} \;
+find $DATAMOUNT -name '*.msg' -exec rm {} \;
+find $DATAMOUNT -name 'LOAD.out' -exec rm {} \;
+
+
+dbs=('icmnlsdb' 'rmdb' 'odsutils')
+
+# $d is database
+# $t is table
+		
+run_tables() {
+  d=$1
+  TBLDIR="$DATAMOUNT/$d/tblspace"
+  echo Executed look for $d
+
+  db2 -tvf $DATAMOUNT/$d/look/$d.Look.sql > $DATAMOUNT/$d/look/$d-look.txt
+
+  for t in $( cat "$TBLDIR/$d-dbtable.lst"  ); do
+   echo In database : $d Moving Data To Tablespace $t
+   cd "$TBLDIR/$t"
+   db2move $d load >> ../$d.import.txt
+  done
+		
+  echo $d Completed 
+}
+
+date
+
+db2 terminate
+
+db2 connect to icmnlsdb
+run_tables icmnlsdb
+db2 terminate
+
+db2 connect to odsutils
+run_tables odsutils
+db2 terminate
+
+db2 connect to rmdb
+run_tables rmdb 
+
+
+
+
+#or b in "${dbs[@]}"
+#o
+
+
+#run_tables $b   
+#one
+
+date
+
+echo Set Triggers and Foreign Keys
+
+~/sbin/testTrigger.sh
+echo +++++++++++++++++++++
+echo =====================
+echo All Complete
+echo =====================
+echo +++++++++++++++++++++

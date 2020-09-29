@@ -1,0 +1,19 @@
+#!/bin/bash
+
+db2stop force
+ipclean
+db2start 
+
+db2 connect to icmnlsdb
+db2 update db cfg using LOGARCHMETH1 DISK:/db/
+db2 connect to rmdb
+db2 update db cfg using LOGARCHMETH1 DISK:/db/
+db2 connect to odsutils
+db2 update db cfg using LOGARCHMETH1 DISK:/db/
+
+db2stop force
+ipclean
+db2start 
+
+
+

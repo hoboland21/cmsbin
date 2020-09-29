@@ -1,0 +1,26 @@
+#!/bin/bash
+
+db2stop force
+ipclean
+db2start 
+
+
+
+db2 drop database ECMDB
+
+
+db2 create db ECMDB on /db
+
+db2stop force
+ipclean
+db2start 
+db2 connect to ecmdb
+db2 'GRANT CREATETAB, BINDADD, CONNECT, CREATE_NOT_FENCED_ROUTINE, IMPLICIT_SCHEMA, LOAD, DBADM, CREATE_EXTERNAL_ROUTINE, QUIESCE_CONNECT, ACCESSCTRL, DATAACCESS ON DATABASE TO USER "ICMADMIN"'
+db2 'GRANT CREATETAB, BINDADD, CONNECT, CREATE_NOT_FENCED_ROUTINE, IMPLICIT_SCHEMA, LOAD, DBADM, CREATE_EXTERNAL_ROUTINE, QUIESCE_CONNECT, ACCESSCTRL, DATAACCESS ON DATABASE TO USER "ICMCONCT"'
+
+
+echo ==============================================================
+echo DB2 Database setup for Content Navigator complete 
+echo ==============================================================
+
+

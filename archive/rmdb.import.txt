@@ -1,0 +1,8 @@
+
+
+Error opening list file db2move.lst for reading (errno 2).  Terminating ...
+
+**Error occured while opening a file.
+
+
+End time:  Thu Aug 20 09:25:27 2020

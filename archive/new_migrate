@@ -1,0 +1,137 @@
+#!/bin/bash
+
+
+echo Clearing and Re nstalling Database 
+
+~/sbin/mkDB
+
+echo Setting Admin authorities on
+
+export DB2CODEPAGE=1208
+
+db2set DB2_RESTORE_GRANT_ADMIN_AUTHORITIES=ON
+
+  DATAMOUNT=$(pwd)
+ 
+ 
+
+echo ================================= 
+echo Transfer Complete
+echo =================================
+
+# grep -v '^-' icmnlsdb.Look.sql | tr '\n' ' ' | awk 'BEGIN { RS = ";" } { print  $0 ";" }' > 2file
+
+find $DATAMOUNT -name '*.txt' -exec rm {} \;
+find $DATAMOUNT -name '*.msg' -exec rm {} \;
+find $DATAMOUNT -name 'LOAD.out' -exec rm {} \;
+
+
+dbs=('icmnlsdb' 'rmdb' )
+
+
+
+stageData () {
+ 
+   # Argument is $1  -  Database N 
+ 
+ 
+   echo Staging data separating Foreign Keys and Triggers 
+   d=$1
+   LOOKDIR="$DATAMOUNT/$d/look"
+
+	echo Extracting $d Triggers
+	sed -n '/-- DDL Statements for Triggers/,/^-- /p' $LOOKDIR/$d.Look.sql > $LOOKDIR/$d.Look.Triggers.sql
+	sed -in '/-- DDL Statements for Triggers/,/^-- /d' $LOOKDIR/$d.Look.sql  
+
+	echo Extracting $d Foreign Keys
+	sed -n '/-- DDL Statements for Foreign Keys/,/^---\+$/p' $LOOKDIR/$d.Look.sql  > $LOOKDIR/$d.Look.Foreign.sql
+	sed -in '/-- DDL Statements for Foreign Keys/,/^---\+$/d' $LOOKDIR/$d.Look.sql
+   
+   cd $DATAMOUNT
+
+}
+
+
+# $d is database
+	
+	
+run_data() {
+  d=$1
+  DATADIR="$DATAMOUNT/$d/data"
+  LOOKDIR="$DATAMOUNT/$d/look"
+
+  echo Executed look for $d
+  db2 connect to $d
+  db2 -tvf $LOOKDIR/$d.Look.sql > $LOOKDIR/$d-look.txt
+    echo executing Foreign Keys for $d
+  db2 connect to $d
+  db2 -tvf $LOOKDIR/$d.Look.Foreign.sql > $LOOKDIR/$d-Foreign.txt
+  db2 connect to $d
+  echo executing Triggers for $d
+  db2 -tvf $LOOKDIR/$d.Look.Triggers.sql > $LOOKDIR/$d-Triggers.txt
+  db2 connect to $d
+ 
+  db2 -v select tabschema,tabname from syscat.tabconst  | awk '{print $1"."$2}'  > all-tables-$d.txt 
+  
+  while read line ; do
+         echo setting integrity for $line  OFF
+         db2 SET INTEGRITY FOR $line  OFF  
+      done < all-tables-$d.txt
+      
+ 		
+  echo In database : $d Moving Data 
+  cd "$DATADIR"
+  db2move $d load >> $d.import.txt
+
+
+	
+  echo $d Completed 
+  cd $DATAMOUNT
+}
+
+
+set_triggers()
+
+{
+
+   d=$1
+   LOOKDIR="$DATAMOUNT/$d/look"
+   db2 connect to $d
+   echo executing Foreign Keys for $d
+   db2 -tvf $LOOKDIR/$d.Look.Foreign.sql > $LOOKDIR/$d-Foreign.txt
+ 
+   echo executing Triggers for $d
+   db2 -tvf $LOOKDIR/$d.Look.Triggers.sql > $LOOKDIR/$d-Triggers.txt
+		
+   echo $d Completed 
+
+}
+
+
+
+echo  Starting the Run
+date
+echo =========================
+
+for d in "${dbs[@]}"
+do
+ db2 connect to $d
+# stageData $d
+ run_data $d   
+ # set_triggers $d
+ db2 terminate
+ echo $d Finished 
+ date
+ echo =====================
+
+done
+
+
+
+
+echo +++++++++++++++++++++
+echo =====================
+echo All Complete
+date
+echo =====================
+echo +++++++++++++++++++++

@@ -1,0 +1,38 @@
+#!/bin/bash
+
+DATAMOUNT=/cmdatalinux1/datatransfer
+
+
+dbs=('icmnlsdb' 'rmdb' 'odsutils')
+
+# $d is database
+# $t is table
+		
+run_tables() {
+  d=$1
+  TBLDIR="$DATAMOUNT/$d/tblspace"
+  echo Executed look for $d
+
+  db2 -tvf $DATAMOUNT/$d/look/$d.Look.sql > $DATAMOUNT/$d/look/$d-look.txt
+
+  for t in $( cat "$TBLDIR/$d-dbtable.lst"  ); do
+   echo In database : $d Moving Data To Tablespace $t
+   cd "$TBLDIR/$t"
+   db2move $d load >> ../$d.import.txt
+  done
+  echo executing Foreign Keys for $d
+  db2 -tvf $DATAMOUNT/$d/look/$d.Foreign.sql > $DATAMOUNT/$d/look/$d-Foreign.txt
+ 
+  echo executing Triggers for $d
+  db2 -tvf $DATAMOUNT/$d/look/$d.Triggers.sql > $DATAMOUNT/$d/look/$d-Triggers.txt
+		
+  echo $d Completed 
+}
+
+date
+for b in "${dbs[@]}"
+do
+ db2 connect to $d
+ run_tables $b   
+done
+date
