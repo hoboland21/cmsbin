@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 db=('rmdb'  'icmnlsdb' 'odsutils')
 
 server_update() {
