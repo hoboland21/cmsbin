@@ -23,16 +23,16 @@ echo
 db2 create db ICMNLSDB  AUTOMATIC STORAGE NO ON '/db' 
 db2 create db RMDB      AUTOMATIC STORAGE NO ON '/db'
 db2 create db ODSUTILS  AUTOMATIC STORAGE NO ON '/db'
-db2 create db ECMDB on  AUTOMATIC STORAGE NO ON '/db'
+db2 create db ECMDB     AUTOMATIC STORAGE NO ON '/db'
 
-db2 connect to icmnlsdb
-db2 update db cfg using LOGARCHMETH1 DISK:/db/
-db2 connect to rmdb
-db2 update db cfg using LOGARCHMETH1 DISK:/db/
-db2 connect to odsutils
-db2 update db cfg using LOGARCHMETH1 DISK:/db/
-db2 connect to ecmdb
-db2 update db cfg using LOGARCHMETH1 DISK:/db/
+#db2 connect to icmnlsdb
+#db2 update db cfg using LOGARCHMETH1 DISK:/db/
+#db2 connect to rmdb
+#db2 update db cfg using LOGARCHMETH1 DISK:/db/
+#db2 connect to odsutils
+#db2 update db cfg using LOGARCHMETH1 DISK:/db/
+#db2 connect to ecmdb
+#db2 update db cfg using LOGARCHMETH1 DISK:/db/
 
 
 db2 connect to icmnlsdb

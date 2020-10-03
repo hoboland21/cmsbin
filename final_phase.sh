@@ -61,8 +61,10 @@ tablespaces() {
 }
 
 
+server_update
+generate_fix
 tablespaces
-exit 
+
 
 
 
