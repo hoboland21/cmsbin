@@ -1,5 +1,4 @@
 #!/bin/bash
 
-export PATH=/filetransfer/contentManager/sbin:$PATH
-
+export PATH=$(pwd):$PATH
 bash
