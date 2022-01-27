@@ -1,18 +1,20 @@
-#!/bin/sh
+#!/bin/bash
 
 cd /db/export
 ### Setting up the mount for holding the database data  
 export DATAMOUNT=$(pwd)
 ### Go over to the script directory
 XFR_START="$(date)"
-mail -s 'Mensa Transfer' jc.clark@modahealth.com "Exporting data from @HOSTNAME -  $(date)"
+echo $(date) Kicking off the job
+exit
 cd /home/db2inst1/cmsbin
 ./new_export.sh icmnlsdb 819
-mail -s 'Mensa Transfer' jc.clark@modahealth.com "ICMNLSDB DB has completed export -  $(date)"
+echo $(date) ICMNLSDB finished processing
 ./new_export.sh rmdb 1208
-mail -s 'Mensa Transfer' jc.clark@modahealth.com "RMDB DB has completed export -  $(date)"
+echo $(date) RMDB finished processing
 ./new_export.sh odsutils 819 
-mail -s 'Mensa Transfer' jc.clark@modahealth.com "ODSUTILS DB Has completed export -  $(date)"
+echo $(date) ODSUTILS finished processing
 rm -fr /datadomain/export/*
+echo $(date) Removed contents of the export directory
 mv /db/export/*    /datadomain/export 
-mail -s 'Mensa Transfer' jc.clark@modahealth.com "Files have been moved to /datadomain/export - JOB Complete -  $XFR_START -> $(date)"
+echo $(date) DB export contents have been moved to /datadomain
