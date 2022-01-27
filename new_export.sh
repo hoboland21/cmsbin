@@ -1,8 +1,5 @@
 #!/usr/bin/bash
 
-
-
-
 db2stop force
 ipclean
 db2start
