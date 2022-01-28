@@ -11,7 +11,7 @@ dbs=('icmnlsdb' 'rmdb' 'odsutils')
 # set up the sbin directory to catchthe commands
 #------------------------------------------------------ 
 old_path=$PATH
-export PATH=/filetransfer/contentManager/sbin:$PATH
+#export PATH=/filetransfer/contentManager/sbin:$PATH
 
 
 #==============================================================
@@ -129,8 +129,13 @@ find $DATAMOUNT -name 'LOAD.out' -exec rm {} \;
 
 # external script mkDB removes all databases and
 # recreates them in the /db directory
+
+db2start 
+#
 mkDB
 # 
+db2start
+
 echo Setting Admin authorities on
 echo Setting default codepage to 1208
 
