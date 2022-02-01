@@ -6,11 +6,11 @@ db=('rmdb'  'icmnlsdb' 'odsutils')
 
 server_update() {
    db2 connect to ICMNLSDB
-   db2 "update ICMADMIN.ICMSTRESOURCEMGR set INETADDR='cm-sbx' where RMCODE=1"
+   db2 "update ICMADMIN.ICMSTRESOURCEMGR set INETADDR='rh-cm-bnd' where RMCODE=1"
    db2 terminate
 
    db2 connect to RMDB
-   db2 "update RMADMIN.RMSERVER set SVR_HOSTNAME='cm-sbx' where SVR_SERVERID=1"
+   db2 "update RMADMIN.RMSERVER set SVR_HOSTNAME='rh-cm-bnd' where SVR_SERVERID=1"
    db2 "update RMADMIN.RMSERVER set SVR_SERPLATFORM='Linux'"
    db2 terminate
 
