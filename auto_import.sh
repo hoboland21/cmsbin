@@ -2,7 +2,7 @@
 
 echo $(date) Beginning Import of Mensa Data set
 
-. /home/db2inst1/.profile
+. /home/db2inst1/.bashrc
 
 
 export PATH=/home/db2inst1/cmsbin:$PATH
@@ -11,17 +11,17 @@ export DATAMOUNT=/datadomain/export/
 cd $DATAMOUNT 
 
 echo $(date) creating backup data image
-rm -fr '/datadomain/export-gold/*'
-cp -r * '/datadomain/export-gold/'
+#rm -fr '/datadomain/export-gold/*'
+#cp -r * '/datadomain/export-gold/'
 
 
 echo $(date) Running varchar.py on icmnmlsdb and odsutils
 
-cd $DATAMOUNT/icmnlsdb/look
-varchar.py icmnlsdb.Look.sql
+#cd $DATAMOUNT/icmnlsdb/look
+#varchar.py icmnlsdb.Look.sql
  
-cd $DATAMOUNT/odsutils/look
-varchar.py odsutils.Look.sql
+#cd $DATAMOUNT/odsutils/look
+#varchar.py odsutils.Look.sql
 
 echo $(date) Executing new_migrate.sh 
 
