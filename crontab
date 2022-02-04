@@ -1,1 +1,6 @@
 00 10 * * * /home/db2inst1/cmsbin/auto_export.sh > /home/db2inst1/logs/auto_export_`/usr/bin/date +\%m +\%d +\%Y`.txt 2>&1
+
+15 10 * * * $HOME/cmsbin/test.sh > $HOME/logs/auto_export_$(date +%m%d%Y).txt 
+
+
+/home/db2inst1/logs/auto_export_$(date +%m%d%Y).txt

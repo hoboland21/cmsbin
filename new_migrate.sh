@@ -102,7 +102,9 @@ run_data() {
 ####################################################################
 # MAIN SCRIPT EXECUTION 
 ####################################################################
-. /home/db2inst1/.profile
+. /home/db2inst1/.bashrc
+
+DATAMOUNT=/datadomain/export-gold/
 
 echo Job Start
 date
