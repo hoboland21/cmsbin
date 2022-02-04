@@ -1,0 +1,1 @@
+00 10 * * * /home/db2inst1/cmsbin/auto_export.sh > /home/db2inst1/logs/auto_export_`/usr/bin/date +\%m +\%d +\%Y`.txt 2>&1

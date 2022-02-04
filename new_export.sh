@@ -1,4 +1,5 @@
 #!/usr/bin/bash
+. /home/db2inst1/.profile
 
 db2stop force
 ipclean

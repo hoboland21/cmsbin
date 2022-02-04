@@ -20,6 +20,6 @@ echo $(date) RMDB finished processing
 
 ./new_export.sh odsutils 819
 echo $(date) ODSUTILS finished processing
-
+touch /datadomain/export/EXPORTCOMPLETE
 echo $(date) Export from DB2 has finished
 echo ====================================
