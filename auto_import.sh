@@ -10,7 +10,7 @@ cd $DATAMOUNT
 echo $(date) creating backup data image
 rm -fr '/datadomain/export-gold/*'
 cp -r * '/datadomain/export-gold/'
-
+exit
 echo $(date) Running varchar.py on icmnmlsdb and odsutils
 
 cd $DATAMOUNT/icmnlsdb/look
