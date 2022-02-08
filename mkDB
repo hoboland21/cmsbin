@@ -6,16 +6,15 @@ db2stop force
 ipclean
 db2start 
 
-
+echo Dropping all Databases
 db2 drop database ICMNLSDB
+db2 uncatalog database ICMNLSDB
 db2 drop database RMDB
+db2 uncatalog database RMDB
 db2 drop database ODSUTILS
+db2 uncatalog database ODSUTILS
 db2 drop database ECMDB
-
-echo Removing all Files from /db
-echo
-
-rm -fr /db/*
+db2 uncatalog database ECMDB
 
 echo Creating databases on /db
 echo 
@@ -80,6 +79,10 @@ db2 connect to ecmdb
 db2 'GRANT CREATETAB, BINDADD, CONNECT, CREATE_NOT_FENCED_ROUTINE, IMPLICIT_SCHEMA, LOAD, DBADM, CREATE_EXTERNAL_ROUTINE, QUIESCE_CONNECT, ACCESSCTRL, DATAACCESS ON DATABASE TO USER "ICMADMIN"'
 db2 'GRANT CREATETAB, BINDADD, CONNECT, CREATE_NOT_FENCED_ROUTINE, IMPLICIT_SCHEMA, LOAD, DBADM, CREATE_EXTERNAL_ROUTINE, QUIESCE_CONNECT, ACCESSCTRL, DATAACCESS ON DATABASE TO USER "ICMCONCT"'
 db2 'GRANT CREATETAB, BINDADD, CONNECT, CREATE_NOT_FENCED_ROUTINE, IMPLICIT_SCHEMA, LOAD, DBADM, CREATE_EXTERNAL_ROUTINE, QUIESCE_CONNECT, ACCESSCTRL, DATAACCESS ON DATABASE TO USER "ECMADMIN"'
+
+db2stop force
+ipclean
+db2start 
 
 
 echo ==============================================================
