@@ -7,12 +7,16 @@ ipclean
 db2start 
 
 echo Dropping all Databases
+echo ICMNLSDB
 db2 drop database ICMNLSDB
 db2 uncatalog database ICMNLSDB
+echo RMDB
 db2 drop database RMDB
 db2 uncatalog database RMDB
+echo ODSUTILS
 db2 drop database ODSUTILS
 db2 uncatalog database ODSUTILS
+echo ECMDB
 db2 drop database ECMDB
 db2 uncatalog database ECMDB
 
